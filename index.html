@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Showcase</title>
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #e5e7eb;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0, 0, 0, 0.03) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0, 0, 0, 0.03) 50px),
+                linear-gradient(45deg, rgba(255, 182, 193, 0.15), rgba(173, 216, 230, 0.15), rgba(144, 238, 144, 0.15), rgba(255, 255, 224, 0.15));
+            font-family: "Segoe UI", sans-serif;
+            position: relative;
+        }
+
+        /* Floating particles animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-10px) rotate(120deg);
+            }
+
+            66% {
+                transform: translateY(10px) rotate(240deg);
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(75, 85, 99, 0.2);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            top: 20%;
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(3) {
+            top: 60%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(4) {
+            top: 80%;
+            left: 90%;
+            animation-delay: 3s;
+        }
+
+        .particle:nth-child(5) {
+            top: 40%;
+            left: 60%;
+            animation-delay: 4s;
+        }
+
+        /* GitHub link */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .github-global {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #1f2937, #374151);
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            color: #f9fafb;
+            text-decoration: none;
+            z-index: 100;
+            transition: all 0.3s ease;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .github-global:hover {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .github-global svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        .github-global:hover svg {
+            transform: rotate(15deg);
+        }
+
+        /* Center Timeline */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .timeline-center {
+            position: fixed;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(90deg, transparent, rgba(75, 85, 99, 0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 4s ease-in-out infinite;
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .timeline-sidebar {
+            position: fixed;
+            top: 20%;
+            left: 20px;
+            transform: translateY(-20%);
+            list-style: none;
+            z-index: 50;
+        }
+
+        .timeline-sidebar::before {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-image: repeating-linear-gradient(to bottom,
+                    rgba(75, 85, 99, 0.3) 0,
+                    rgba(75, 85, 99, 0.3) 10px,
+                    transparent 10px,
+                    transparent 20px);
+        }
+
+        .timeline-sidebar li {
+            position: relative;
+            margin: 2rem 0;
+            padding-left: 1.5rem;
+            color: #888;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .timeline-sidebar li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 3px solid #4b5563;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-sidebar li:hover {
+            color: #4b5563;
+            transform: translateX(10px);
+        }
+
+        .timeline-sidebar li.active {
+            color: #111827;
+            font-weight: bold;
+            transform: translateX(15px);
+        }
+
+        .timeline-sidebar li.active::before {
+            background: #4b5563;
+            box-shadow: 0 0 0 6px rgba(75, 85, 99, 0.2);
+            transform: translateY(-50%) scale(1.3);
+        }
+
+        /* Sections */
+        .section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            z-index: 1;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        /* Certificate Container */
+        @keyframes glow {
+            0% {
+                box-shadow:
+                    0 30px 60px rgba(0, 0, 0, 0.25),
+                    0 10px 25px rgba(0, 0, 0, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+            }
+
+            50% {
+                box-shadow:
+                    0 40px 80px rgba(0, 0, 0, 0.3),
+                    0 15px 35px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+                    0 0 0 1px rgba(255, 255, 255, 0.25);
+            }
+
+            100% {
+                box-shadow:
+                    0 30px 60px rgba(0, 0, 0, 0.25),
+                    0 10px 25px rgba(0, 0, 0, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .certificate-box {
+            position: relative;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(75, 85, 99, 0.4);
+            border-radius: 24px;
+            display: flex;
+            gap: 2rem;
+            padding: 2.5rem 2.5rem 4.5rem;
+            /* added bottom padding */
+            max-width: 1000px;
+            width: 100%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: visible;
+            box-shadow:
+                0 30px 60px rgba(0, 0, 0, 0.25),
+                0 10px 25px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
+                glow 4s ease-in-out 0.8s infinite;
+            margin: 0 100px;
+        }
+
+        .certificate-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(255, 255, 255, 0.05) 50%,
+                    rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 22px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .certificate-box:hover {
+            transform: translateY(-20px) scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow:
+                0 50px 100px rgba(0, 0, 0, 0.35),
+                0 20px 40px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+                0 0 0 2px rgba(255, 255, 255, 0.3),
+                0 0 50px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            border-color: rgba(75, 85, 99, 0.6);
+        }
+
+        .indicator-dot {
+            position: absolute;
+            left: 50%;
+            top: -16px;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ffffff, #f3f4f6);
+            border: 4px solid #4b5563;
+            border-radius: 50%;
+            z-index: 10;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .certificate-box:hover .indicator-dot {
+            transform: translateX(-50%) scale(1.3);
+            box-shadow:
+                0 0 0 6px rgba(75, 85, 99, 0.2),
+                0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #4b5563, #374151);
+            border-color: #ffffff;
+        }
+
+        .certificate-media {
+            flex: 2;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            z-index: 3;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .certificate-media img,
+        .certificate-media iframe {
+            width: 100%;
+            height: 500px;
+            border-radius: 16px;
+            border: none;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .certificate-media:hover img,
+        .certificate-media:hover iframe {
+            transform: scale(1.05);
+        }
+
+        .certificate-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            z-index: 3;
+            position: relative;
+            cursor: default;
+            /* no longer whole-box clickable */
+        }
+
+        .certificate-info h2 {
+            font-size: 2rem;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            transition: all 0.4s ease;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+            font-weight: 700;
+        }
+
+        .certificate-box:hover .certificate-info h2 {
+            color: #000;
+            transform: translateX(10px);
+            text-shadow: 0 4px 8px rgba(255, 255, 255, 0.9);
+        }
+
+        .certificate-info .source {
+            font-size: 1.1rem;
+            color: #374151;
+            position: relative;
+            transition: all 0.4s ease;
+            font-weight: 500;
+        }
+
+        .certificate-info .source::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4b5563, #6b7280);
+            transition: width 0.4s ease;
+        }
+
+        .certificate-box:hover .certificate-info .source::after {
+            width: 100%;
+        }
+
+        /* Arrow circle indicator */
+        .arrow-indicator {
+            position: absolute;
+            bottom: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4b5563, #374151);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .arrow-indicator svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: transform 0.3s ease;
+        }
+
+        .certificate-box:hover .arrow-indicator {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .certificate-box:hover .arrow-indicator svg {
+            transform: translateX(2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline-sidebar {
+                display: none;
+            }
+
+            .certificate-box {
+                flex-direction: column;
+                padding: 2rem 2rem 4rem;
+                margin: 0 20px;
+            }
+
+            .certificate-media img,
+            .certificate-media iframe {
+                height: 300px;
+            }
+
+            .certificate-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .github-global {
+                padding: 8px 12px;
+                font-size: 1rem;
+            }
+
+            .arrow-indicator {
+                bottom: -2rem;
+                right: 50%;
+                left: auto;
+                transform: translateX(50%) translateY(10px);
+            }
+
+            .certificate-box:hover .arrow-indicator {
+                transform: translateX(50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- GitHub Button -->
+    <a href="https://github.com/ImnotVarun" target="_blank" class="github-global">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+        </svg>
+        ImnotVarun
+    </a>
+
+    <div class="timeline-center"></div>
+    <ul class="timeline-sidebar">
+        <li data-index="0">Python Basics</li>
+        <li data-index="1">Web Dev Bootcamp</li>
+        <li data-index="2">Frontend Showcase</li>
+    </ul>
+
+    <section class="section" id="sec0">
+        <div class="certificate-box">
+            <div class="indicator-dot"></div>
+            <div class="certificate-media">
+                <img src="./1.png" alt="Certificate 1" />
+            </div>
+            <div class="certificate-info">
+                <h2>Python Basics Certificate</h2>
+                <div class="source">HackerRank</div>
+                <div class="arrow-indicator" onclick="window.open('https://www.google.com', '_blank')">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="sec1">
+        <div class="certificate-box">
+            <div class="indicator-dot"></div>
+            <div class="certificate-media">
+                <iframe src="https://example.com/sample-certificate" title="Certificate 2"></iframe>
+            </div>
+            <div class="certificate-info">
+                <h2>Web Development Bootcamp</h2>
+                <div class="source">Udemy</div>
+                <div class="arrow-indicator" onclick="window.open('https://www.google.com', '_blank')">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="sec2">
+        <div class="certificate-box">
+            <div class="indicator-dot"></div>
+            <div class="certificate-media">
+                <img src="./1.png" alt="Certificate 3" />
+            </div>
+            <div class="certificate-info">
+                <h2>Frontend Project Showcase</h2>
+                <div class="source">Personal Project</div>
+                <div class="arrow-indicator" onclick="window.open('https://www.google.com', '_blank')">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const sections = document.querySelectorAll(".section");
+        const items = document.querySelectorAll(".timeline-sidebar li");
+
+        const obs = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const idx = [...sections].indexOf(entry.target);
+                    if (entry.isIntersecting) {
+                        items.forEach((li) => li.classList.toggle("active", +li.dataset.index === idx));
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        sections.forEach((sec) => obs.observe(sec));
+
+        items.forEach((item) => {
+            item.addEventListener('click', () => {
+                const index = item.dataset.index;
+                document.getElementById(`sec${index}`).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach((particle, i) => {
+            particle.style.animationDelay = `${i * 1.2}s`;
+            particle.style.animationDuration = `${6 + i * 2}s`;
+        });
+    </script>
+</body>
+
+</html>
